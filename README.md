@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# 2D game "Duck Hunt"
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Duck Hunt 2D](./src/assets/duckhunt.png)
 
 ## Available Scripts
 
