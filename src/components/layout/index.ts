@@ -1,3 +1,3 @@
 export { App } from './app/app.component'
-export { TodosLayout } from './todos/todoslayout.component'
+export { Game } from './game/game.component'
 export { Home } from './home/home.component'

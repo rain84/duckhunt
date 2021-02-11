@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import duckhunt from 'assets/duckhunt.png'
 
 const Img = styled.img`
-	width: 100%;
+	width: 100vh;
 `
 
 const H1 = styled.h1`
