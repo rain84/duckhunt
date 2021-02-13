@@ -1,11 +1,11 @@
 {
   "backgroundColor": "#3fbfff",
   "width": 800,
-  "height": 600,
+  "height": 500,
   "physics": {
     "default": "arcade",
     "arcade": {
-      "gravity": { "y": 300 },
+      "gravity": { "y": 0 },
       "debug:": false
     }
   }

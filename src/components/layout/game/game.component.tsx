@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { IonPhaser, GameInstance } from '@ion-phaser/react'
 import styled from 'styled-components'
 import { Level, Tutorial } from 'game/scenes'
@@ -15,7 +16,19 @@ const Section = styled.section`
 `
 
 export const Game = () => {
-	const [config] = useConfig({ scene: Tutorial })
+	// const [config] = useConfig({
+	// 	scene: Tutorial,
+	// 	height: 600,
+	// 	physics: {
+	// 		arcade: {
+	// 			gravity: { y: 300 },
+	// 		},
+	// 	},
+	// })
+
+	const [config] = useConfig({ scene: Level })
+
+	// useEffect(() => console.log(config), [config])
 
 	return (
 		<Section>

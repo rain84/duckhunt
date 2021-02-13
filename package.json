@@ -16,6 +16,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.7",
     "@types/webpack-env": "^1.16.0",
+    "deepmerge": "^4.2.2",
     "husky": "^5.0.9",
     "lint-staged": "^10.5.4",
     "node-sass": "^5.0.0",
