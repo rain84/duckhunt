@@ -30,7 +30,7 @@ export class Tutorial extends Phaser.Scene implements ITutorial {
 	#gameOverText: Maybe<Phaser.GameObjects.Text>
 
 	constructor() {
-		super('Examples')
+		super('Tutorial')
 		this.#center.x = this.#size.width / 2
 		this.#center.y = this.#size.height / 2
 	}
