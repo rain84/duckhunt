@@ -1,15 +1,25 @@
-import { useState, useEffect } from 'react'
-import { IonPhaser } from '@ion-phaser/react'
-import { Scene } from 'game'
+import { IonPhaser, GameInstance } from '@ion-phaser/react'
+import styled from 'styled-components'
+import { Level, Tutorial } from 'game/scenes'
+import { useConfig } from 'hooks'
+
+const Section = styled.section`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+
+	& > .ion-phaser {
+		border: 1px solid black;
+	}
+`
 
 export const Game = () => {
-	const [config, updateConfig] = useState({
-		type: Phaser.AUTO,
-		backgroundColor: '#125555',
-		width: 800,
-		height: 600,
-		scene: Scene,
-	})
+	const [config] = useConfig({ scene: Tutorial })
 
-	return <IonPhaser game={config} initialize={true} />
+	return (
+		<Section>
+			<IonPhaser game={config as GameInstance} className="ion-phaser" />
+		</Section>
+	)
 }
