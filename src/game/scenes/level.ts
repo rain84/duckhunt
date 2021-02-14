@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import { Duck } from 'game/actors'
+import { Duck, Crosshair } from 'game/actors'
 import { Background } from 'game/static'
-import { SceneObject } from 'game/SceneObject'
+import { SceneObject } from 'game/base-classes/SceneObject'
 
 // type SpriteWithDynamicBody = Maybe<Phaser.Types.Physics.Arcade.SpriteWithDynamicBody>
 // type StaticGroup = Maybe<Phaser.Physics.Arcade.StaticGroup>
@@ -16,7 +16,7 @@ export class Level extends Phaser.Scene {
 	constructor() {
 		super('Level')
 		this.#background = new Background('game-assets/duck-hunt-background.png', this)
-		this.#actors = [new Duck(this)]
+		this.#actors = [new Duck(this), new Crosshair(this)]
 	}
 
 	preload() {
