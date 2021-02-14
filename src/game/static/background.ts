@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import { SceneObject } from 'game/SceneObject'
+import { StaticObject } from 'game/base-classes'
 
-export class Background extends SceneObject {
+export class Background extends StaticObject {
 	constructor(private src: string, private scene: Phaser.Scene) {
 		super()
 	}
@@ -11,6 +11,6 @@ export class Background extends SceneObject {
 	}
 
 	create() {
-		this.scene.add.image(SceneObject.center.x, SceneObject.center.y, 'bg').setDepth(100)
+		this.scene.add.image(StaticObject.scene.center.x, StaticObject.scene.center.y, 'bg').setDepth(100)
 	}
 }
