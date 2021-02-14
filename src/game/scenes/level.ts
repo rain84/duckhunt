@@ -1,48 +1,37 @@
 import Phaser from 'phaser'
-import config from '../../config.json'
 import { Duck } from 'game/actors'
-import { Actor } from 'game/actors/interfaces'
+import { Background } from 'game/static'
+import { SceneObject } from 'game/SceneObject'
 
-type SpriteWithDynamicBody = Maybe<Phaser.Types.Physics.Arcade.SpriteWithDynamicBody>
-type StaticGroup = Maybe<Phaser.Physics.Arcade.StaticGroup>
-type Group = Maybe<Phaser.Physics.Arcade.Group>
-type CursorKeys = Maybe<Phaser.Types.Input.Keyboard.CursorKeys>
+// type SpriteWithDynamicBody = Maybe<Phaser.Types.Physics.Arcade.SpriteWithDynamicBody>
+// type StaticGroup = Maybe<Phaser.Physics.Arcade.StaticGroup>
+// type Group = Maybe<Phaser.Physics.Arcade.Group>
+// type CursorKeys = Maybe<Phaser.Types.Input.Keyboard.CursorKeys>
 
 export class Level extends Phaser.Scene {
-	#size = {
-		width: config.width,
-		height: config.height,
-	}
-	#center = {
-		x: config.width / 2,
-		y: config.height / 2,
-	}
-
 	#isGameOver = false
-	#actors: Actor[]
+	#actors: SceneObject[]
+	#background: SceneObject
 
 	constructor() {
 		super('Level')
+		this.#background = new Background('game-assets/duck-hunt-background.png', this)
 		this.#actors = [new Duck(this)]
 	}
 
 	preload() {
-		this.load.image('bg', 'game-assets/duck-hunt-background.png')
+		this.#background.preload()
 		this.#actors.forEach((actor) => actor.preload())
 	}
 
 	create() {
-		this.add.image(this.#center.x, this.#center.y, 'bg')
-		// this.add.image(this.#center.x, this.#center.y, 'duck').setScale(0.5)
-
+		this.#background.create()
 		this.#actors.forEach((actor) => actor.create())
 	}
-
-	createEnemies() {}
 
 	update() {
 		if (this.#isGameOver) return
 
-		this.#actors.forEach((actor) => actor.update())
+		this.#isGameOver = this.#actors.some((actor) => actor.update())
 	}
 }
