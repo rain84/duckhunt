@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { SceneObject } from 'game/interfaces'
+import { SceneObject } from 'game/SceneObject'
 
 export class Background extends SceneObject {
 	constructor(private src: string, private scene: Phaser.Scene) {
