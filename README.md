@@ -2,6 +2,12 @@
 
 ![Duck Hunt 2D](./src/assets/duckhunt.png)
 
+## Some notes about gameplay:
+
+- **⇦ ⇧ ⇨ ⇩** - for the control of crosshair
+- **`Space`** for 🔥 fire 🔥
+- **𝐑 - key** for reloading the barrel 💣
+
 ## Available Scripts
 
 In the project directory, you can run:
