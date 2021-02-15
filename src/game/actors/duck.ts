@@ -2,16 +2,25 @@ import Phaser from 'phaser'
 import { BaseActor } from 'game/base-classes'
 import { IAnimated } from 'game/interfaces'
 import { Direction, DuckAnimation } from 'game/types'
+import { getRandomDirection } from 'game/util'
 
 export class Duck extends BaseActor implements IAnimated {
 	protected width = 40
 	protected height = 37
 	private animation = DuckAnimation.RIGHT
-	protected soundList = ['dead_duck_falls']
+	protected soundList = ['dead_duck_falls', 'duck_quack']
+	protected isKilled = false
+	private counter = {
+		afterBorderCollision: 0,
+		beforeSwitchingDirection: 0,
+		quack: Phaser.Math.Between(25, 75),
+	}
 
 	constructor(private scene: Phaser.Scene) {
 		super()
-		this.movement.speed = 100
+
+		this.movement.speed = 300
+		this.setSwitchTimer()
 	}
 
 	preload() {
@@ -61,15 +70,42 @@ export class Duck extends BaseActor implements IAnimated {
 	update() {
 		if (!this._instance) return
 
+		if (!this.isKilled) {
+			this.shouldQuack()
+			this.shouldSwitchDirection()
+		}
+
 		this.checkOnBounds()
 		this._instance.setVelocity(this.movement.velocity.x, this.movement.velocity.y).play(this.animation, true)
 	}
 
-	onOverlap() {}
+	shouldQuack() {
+		if (this.counter.quack--) return
+
+		this.counter.quack = Phaser.Math.Between(50, 150)
+		this.sounds.duck_quack.play()
+	}
+
+	shouldSwitchDirection() {
+		if (this.counter.beforeSwitchingDirection--) return
+
+		this.setSwitchTimer()
+		if (!this.movement.direction) return
+
+		const newDirection = getRandomDirection.following(this.movement.direction)
+		if (newDirection) {
+			this.prepareMove(newDirection)
+		}
+	}
 
 	kill() {
-		// this.sounds.dead_duck_falls.play()
-		this.prepareMove(Direction.DOWN, () => {})
+		this.isKilled = true
+		this.sounds.dead_duck_falls.play()
+		this.prepareMove(Direction.DOWN, () => console.log('is killed'))
+	}
+
+	setSwitchTimer() {
+		this.counter.beforeSwitchingDirection = Phaser.Math.Between(10, 30)
 	}
 
 	setAnimation(direction: Direction) {
@@ -138,10 +174,22 @@ export class Duck extends BaseActor implements IAnimated {
 
 	private checkOnBounds() {
 		const isOutOfBorder = this.isOutOfBorder()
+		if (!isOutOfBorder) return
+		if (this.counter.afterBorderCollision--) return
 
-		if (isOutOfBorder?.right) this.prepareMove(Direction.UP)
-		if (isOutOfBorder?.top) this.prepareMove(Direction.DOWN_LEFT)
-		if (isOutOfBorder?.left) this.prepareMove(Direction.DOWN_RIGHT)
-		if (isOutOfBorder?.bottom) this.prepareMove(Direction.UP)
+		let dir: Direction
+
+		if (isOutOfBorder?.right) dir = Direction.RIGHT
+		else if (isOutOfBorder?.top) dir = Direction.UP
+		else if (isOutOfBorder?.left) dir = Direction.LEFT
+		else {
+			dir = Direction.DOWN
+
+			if (this.isKilled) this.isKilled = false
+		}
+
+		dir = getRandomDirection.opposite(dir)
+		this.prepareMove(dir)
+		this.counter.afterBorderCollision = 5
 	}
 }

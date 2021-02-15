@@ -1,2 +1,2 @@
 export { Duck } from './duck'
-export { Crosshair } from './сrosshair'
+export { Hunter } from './hunter'

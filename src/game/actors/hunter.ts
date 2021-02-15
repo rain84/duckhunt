@@ -5,7 +5,7 @@ import { Duck } from 'game/actors'
 import { IOverlappable, IKeyboard } from 'game/interfaces'
 import { Direction, CursorKeys, ZIndex } from 'game/types'
 
-export class Crosshair extends BaseActor implements IOverlappable {
+export class Hunter extends BaseActor implements IOverlappable {
 	protected width = 32
 	protected height = 32
 	private cursors: CursorKeys
@@ -13,7 +13,7 @@ export class Crosshair extends BaseActor implements IOverlappable {
 
 	constructor(private ammo: Ammo, private scene: Phaser.Scene) {
 		super()
-		this.movement.speed = 200
+		this.movement.speed = 400
 	}
 
 	preload() {

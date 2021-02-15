@@ -1,0 +1,1 @@
+export { getRandomDirection } from './directions'
