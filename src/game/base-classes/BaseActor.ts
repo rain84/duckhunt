@@ -45,7 +45,6 @@ export abstract class BaseActor extends SceneObject {
 
 	protected setMovement(direction: Direction, onFinish: UnknownFn = (...args: unknown[]) => {}) {
 		if (this.movement.direction === direction) return
-		console.log('setMovement')
 
 		this.movement.velocity = { x: 0, y: 0 }
 		switch (direction) {

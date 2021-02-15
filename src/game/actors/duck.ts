@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import { BaseActor } from 'game/base-classes'
-import { IAnimated, ISound } from 'game/interfaces'
+import { IAnimated } from 'game/interfaces'
 import { Direction, DuckAnimation } from 'game/types'
 
 export class Duck extends BaseActor implements IAnimated {
@@ -65,13 +65,11 @@ export class Duck extends BaseActor implements IAnimated {
 		this._instance.setVelocity(this.movement.velocity.x, this.movement.velocity.y).play(this.animation, true)
 	}
 
-	onOverlap() {
-		console.log('Duck overlaped')
-	}
+	onOverlap() {}
 
 	kill() {
 		// this.sounds.dead_duck_falls.play()
-		this.prepareMove(Direction.DOWN, () => console.log('Killed'))
+		this.prepareMove(Direction.DOWN, () => {})
 	}
 
 	setAnimation(direction: Direction) {

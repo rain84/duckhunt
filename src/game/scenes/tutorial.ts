@@ -106,7 +106,6 @@ export class Tutorial extends Phaser.Scene implements ITutorial {
 
 		if (this.#gameOverText) {
 			const x = this.#size.width - this.#gameOverText.width - 16
-			console.log('x', x)
 			this.#gameOverText.setVisible(true).setText('Game over').setPosition(x, 16)
 		}
 	}
