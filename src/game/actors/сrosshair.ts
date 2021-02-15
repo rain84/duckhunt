@@ -1,44 +1,43 @@
 import Phaser from 'phaser'
 import { BaseActor } from 'game/base-classes'
+import { Ammo } from 'game/static'
 import { Duck } from 'game/actors'
-import { IOverlappable } from 'game/interfaces'
-import { Direction, CursorKeys } from 'game/types'
+import { IOverlappable, IKeyboard } from 'game/interfaces'
+import { Direction, CursorKeys, ZIndex } from 'game/types'
 
 export class Crosshair extends BaseActor implements IOverlappable {
 	protected width = 32
 	protected height = 32
-	protected soundList = ['shotgun']
 	private cursors: CursorKeys
+	private keyboard: IKeyboard = {}
 
-	constructor(private scene: Phaser.Scene) {
+	constructor(private ammo: Ammo, private scene: Phaser.Scene) {
 		super()
 		this.movement.speed = 200
 	}
 
 	preload() {
 		this.scene.load.image('crosschair', 'game-assets/gun-pointer.png')
-		this.preloadSound(this.soundList, this.scene)
 	}
 
 	create() {
 		const { scene } = this
 		this._instance = scene.physics.add
 			.sprite(BaseActor.scene.center.x, BaseActor.scene.center.y, 'crosschair')
-			.setDepth(200)
+			.setDepth(ZIndex.CROSSHAIR)
 
 		this.cursors = scene.input.keyboard.createCursorKeys()
-		this.sounds = this.createSound(this.soundList, this.scene)
+		this.keyboard.R = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
 	}
 
 	update() {
 		if (!this._instance || !this.cursors) return
 
-		if (this.cursors.space.isDown) {
-			this.sounds.shotgun.play()
-		}
-
 		const movement = this.movement
 		const isOutOfBorder = this.isOutOfBorder()
+
+		if (this?.cursors?.space.isDown) this.ammo.tryToShoot()
+		if (this.keyboard.R.isDown) this.ammo.reload()
 
 		if (!isOutOfBorder?.left && this.cursors.left.isDown) this.setMovement(Direction.LEFT)
 		else if (!isOutOfBorder?.right && this.cursors.right.isDown) this.setMovement(Direction.RIGHT)
@@ -52,7 +51,7 @@ export class Crosshair extends BaseActor implements IOverlappable {
 	}
 
 	onOverlap = (duck: Duck): ArcadePhysicsCallback => () => {
-		if (this?.cursors?.space.isDown) {
+		if (this?.cursors?.space.isDown && this.ammo.isShooting) {
 			duck.kill()
 		}
 	}

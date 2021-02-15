@@ -1,3 +1,5 @@
 import { SceneObject } from './SceneObject'
 
-export abstract class StaticObject extends SceneObject {}
+export abstract class StaticObject extends SceneObject {
+	preload() {}
+}

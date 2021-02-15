@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { StaticObject } from 'game/base-classes'
+import { ZIndex } from 'game/types'
 
 export class Background extends StaticObject {
 	constructor(private src: string, private scene: Phaser.Scene) {
@@ -11,6 +12,6 @@ export class Background extends StaticObject {
 	}
 
 	create() {
-		this.scene.add.image(StaticObject.scene.center.x, StaticObject.scene.center.y, 'bg').setDepth(100)
+		this.scene.add.image(StaticObject.scene.center.x, StaticObject.scene.center.y, 'bg').setDepth(ZIndex.BACKGROUND)
 	}
 }

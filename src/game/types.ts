@@ -7,6 +7,7 @@ export type StaticGroup = Maybe<Phaser.Physics.Arcade.StaticGroup>
 export type Group = Maybe<Phaser.Physics.Arcade.Group>
 export type UnknownFn = () => void
 export type Sound = Phaser.Sound.BaseSound
+export type Text = Maybe<Phaser.GameObjects.Text>
 
 export enum Direction {
 	RIGHT,
@@ -18,6 +19,14 @@ export enum Direction {
 	DOWN_RIGHT,
 	DOWN_LEFT,
 	NONE,
+}
+
+export enum ZIndex {
+	ENEMY,
+	BACKGROUND,
+	STATIC,
+	LABELS,
+	CROSSHAIR,
 }
 
 export enum DuckAnimation {

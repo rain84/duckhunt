@@ -13,3 +13,4 @@ export interface IAnimated {
 }
 
 export interface ISound extends Map<Sound> {}
+export interface IKeyboard extends Map<Phaser.Input.Keyboard.Key> {}

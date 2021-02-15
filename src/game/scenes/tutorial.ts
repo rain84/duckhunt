@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import config from '../../config.json'
+import config from 'config.json'
 
 type SpriteWithDynamicBody = Maybe<Phaser.Types.Physics.Arcade.SpriteWithDynamicBody>
 type StaticGroup = Maybe<Phaser.Physics.Arcade.StaticGroup>

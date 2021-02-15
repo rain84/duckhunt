@@ -1,7 +1,7 @@
 {
   "backgroundColor": "#3fbfff",
   "width": 800,
-  "height": 500,
+  "height": 800,
   "physics": {
     "default": "arcade",
     "arcade": {

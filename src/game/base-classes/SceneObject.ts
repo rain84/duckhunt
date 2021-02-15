@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import { Sprite } from 'game/types'
 import { ISound } from 'game/interfaces'
-import config from '../../config.json'
+import config from 'config.json'
 export abstract class SceneObject {
 	abstract preload(): void
 	abstract create(): void
@@ -21,9 +21,11 @@ export abstract class SceneObject {
 	protected sounds: ISound = {}
 	protected soundList: string[] = []
 
-	public get instance() {
+	get instance() {
 		return this._instance
 	}
+
+	update() {}
 
 	protected preloadSound(soundList: string[], scene: Phaser.Scene) {
 		soundList.forEach((sound) =>
