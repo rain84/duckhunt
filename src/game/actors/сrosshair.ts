@@ -5,17 +5,19 @@ import { IOverlappable } from 'game/interfaces'
 import { Direction, CursorKeys } from 'game/types'
 
 export class Crosshair extends BaseActor implements IOverlappable {
+	protected width = 32
+	protected height = 32
+	protected soundList = ['shotgun']
 	private cursors: CursorKeys
 
 	constructor(private scene: Phaser.Scene) {
 		super()
 		this.movement.speed = 200
-		this.width = 32
-		this.height = 32
 	}
 
 	preload() {
 		this.scene.load.image('crosschair', 'game-assets/gun-pointer.png')
+		this.preloadSound(this.soundList, this.scene)
 	}
 
 	create() {
@@ -25,10 +27,15 @@ export class Crosshair extends BaseActor implements IOverlappable {
 			.setDepth(200)
 
 		this.cursors = scene.input.keyboard.createCursorKeys()
+		this.sounds = this.createSound(this.soundList, this.scene)
 	}
 
 	update() {
 		if (!this._instance || !this.cursors) return
+
+		if (this.cursors.space.isDown) {
+			this.sounds.shotgun.play()
+		}
 
 		const movement = this.movement
 		const isOutOfBorder = this.isOutOfBorder()

@@ -1,4 +1,8 @@
-import { Direction } from './types'
+import { Direction, Sound } from './types'
+
+interface Map<T> {
+	[prop: string]: T
+}
 
 export interface IOverlappable {
 	onOverlap: (object: any) => ArcadePhysicsCallback
@@ -7,3 +11,5 @@ export interface IOverlappable {
 export interface IAnimated {
 	setAnimation(direction: Direction): void
 }
+
+export interface ISound extends Map<Sound> {}

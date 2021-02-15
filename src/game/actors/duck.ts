@@ -1,13 +1,13 @@
 import Phaser from 'phaser'
 import { BaseActor } from 'game/base-classes'
-import { IAnimated } from 'game/interfaces'
+import { IAnimated, ISound } from 'game/interfaces'
 import { Direction, DuckAnimation } from 'game/types'
 
 export class Duck extends BaseActor implements IAnimated {
 	protected width = 40
 	protected height = 37
-
 	private animation = DuckAnimation.RIGHT
+	protected soundList = ['dead_duck_falls']
 
 	constructor(private scene: Phaser.Scene) {
 		super()
@@ -19,12 +19,14 @@ export class Duck extends BaseActor implements IAnimated {
 			frameWidth: this.width,
 			frameHeight: this.height,
 		})
+		this.preloadSound(this.soundList, this.scene)
 	}
 
 	create() {
 		const { scene } = this
 		this._instance = scene.physics.add.sprite(BaseActor.scene.center.x - this.width * 2, BaseActor.scene.center.y, '')
 		this._instance.setScale(1.5).setCollideWorldBounds(true)
+		this.sounds = this.createSound(this.soundList, this.scene)
 
 		const animations = [
 			{
@@ -68,6 +70,7 @@ export class Duck extends BaseActor implements IAnimated {
 	}
 
 	kill() {
+		// this.sounds.dead_duck_falls.play()
 		this.prepareMove(Direction.DOWN, () => console.log('Killed'))
 	}
 

@@ -6,6 +6,7 @@ export type Sprite = Maybe<
 export type StaticGroup = Maybe<Phaser.Physics.Arcade.StaticGroup>
 export type Group = Maybe<Phaser.Physics.Arcade.Group>
 export type UnknownFn = () => void
+export type Sound = Phaser.Sound.BaseSound
 
 export enum Direction {
 	RIGHT,

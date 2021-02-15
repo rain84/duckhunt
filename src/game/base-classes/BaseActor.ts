@@ -7,9 +7,7 @@ export abstract class BaseActor extends SceneObject {
 	// because it should be inited in Phaser's create() method,
 	// which will run ONLY AFTER EcmaScript-constructor
 	// protected instance: Maybe<Phaser.GameObjects.Sprite>
-	abstract preload(): void
 	abstract update(): void
-	abstract create(): void
 
 	protected movement = {
 		speed: 0,
