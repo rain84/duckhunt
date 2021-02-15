@@ -1,122 +1,132 @@
 import Phaser from 'phaser'
 import { BaseActor } from 'game/base-classes'
-import { Direction, SpriteWithDynamicBody } from 'game/types'
+import { IAnimated } from 'game/interfaces'
+import { Direction, DuckAnimation } from 'game/types'
 
-export enum Animation {
-	RIGHT = 'RIGHT',
-	UP = 'UP',
-	UP_RIGHT = 'UP_RIGHT',
-	KILLED = 'KILLED',
-}
+export class Duck extends BaseActor implements IAnimated {
+	protected width = 40
+	protected height = 37
 
-export class Duck extends BaseActor {
-	static width = 40
-	static height = 37
-
-	instance: SpriteWithDynamicBody
-	#animation = Animation.RIGHT
-	movement = {
-		speed: 100,
-		velocity: { x: 0, y: 0 },
-		direction: Direction.RIGHT,
-	}
+	private animation = DuckAnimation.RIGHT
 
 	constructor(private scene: Phaser.Scene) {
 		super()
+		this.movement.speed = 100
 	}
 
 	preload() {
 		this.scene.load.spritesheet('duck', 'game-assets/duck.sprite120x148.png', {
-			frameWidth: Duck.width,
-			frameHeight: Duck.height,
+			frameWidth: this.width,
+			frameHeight: this.height,
 		})
 	}
 
 	create() {
 		const { scene } = this
-		this.instance = scene.physics.add.sprite(BaseActor.scene.center.x, BaseActor.scene.center.y, '')
-		this.instance.setScale(1.5).setCollideWorldBounds(true)
-		this.setMovement(Direction.DOWN_RIGHT)
+		this._instance = scene.physics.add.sprite(BaseActor.scene.center.x - this.width * 2, BaseActor.scene.center.y, '')
+		this._instance.setScale(1.5).setCollideWorldBounds(true)
 
 		const animations = [
 			{
-				key: Animation.RIGHT,
+				key: DuckAnimation.RIGHT,
 				frames: scene.anims.generateFrameNumbers('duck', { frames: [0, 1, 2] }),
 				frameRate: 8,
 				repeat: -1,
 			},
 			{
-				key: Animation.UP_RIGHT,
+				key: DuckAnimation.UP_RIGHT,
 				frames: scene.anims.generateFrameNumbers('duck', { frames: [3, 4, 5] }),
 				frameRate: 8,
 				repeat: -1,
 			},
 			{
-				key: Animation.UP,
+				key: DuckAnimation.UP,
 				frames: scene.anims.generateFrameNumbers('duck', { frames: [6, 7, 8] }),
 				frameRate: 8,
 				repeat: -1,
 			},
 			{
-				key: Animation.KILLED,
+				key: DuckAnimation.KILLED,
 				frames: scene.anims.generateFrameNumbers('duck', { frames: [9, 10] }),
 				frameRate: 4,
 				repeat: -1,
 			},
 		]
 		animations.forEach((config) => scene.anims.create(config))
+		this.prepareMove(Direction.RIGHT)
+	}
+
+	update() {
+		if (!this._instance) return
+
+		this.checkOnBounds()
+		this._instance.setVelocity(this.movement.velocity.x, this.movement.velocity.y).play(this.animation, true)
+	}
+
+	onOverlap() {
+		console.log('Duck overlaped')
+	}
+
+	kill() {
+		this.prepareMove(Direction.DOWN, () => console.log('Killed'))
 	}
 
 	setAnimation(direction: Direction) {
-		if (!this.instance) return
+		if (!this._instance) return
 
 		switch (direction) {
 			case Direction.RIGHT:
-				this.#animation = Animation.RIGHT
-				this.instance.setAngle(0)
-				this.instance.setFlip(false, false)
+				this.animation = DuckAnimation.RIGHT
+				this._instance.setAngle(0)
+				this._instance.setFlip(false, false)
 				break
 
 			case Direction.LEFT:
-				this.#animation = Animation.RIGHT
-				this.instance.setAngle(0)
-				this.instance.setFlip(true, false)
+				this.animation = DuckAnimation.RIGHT
+				this._instance.setAngle(0)
+				this._instance.setFlip(true, false)
 				break
 
 			case Direction.UP:
-				this.#animation = Animation.UP
-				this.instance.setAngle(0)
-				this.instance.setFlip(false, false)
+				this.animation = DuckAnimation.UP
+				this._instance.setAngle(0)
+				this._instance.setFlip(false, false)
 				break
 
 			case Direction.DOWN:
-				this.#animation = Animation.KILLED
-				this.instance.setAngle(0)
-				this.instance.setFlip(false, false)
+				this.animation = DuckAnimation.KILLED
+				this._instance.setAngle(0)
+				this._instance.setFlip(false, false)
 				break
 
 			case Direction.UP_RIGHT:
-				this.#animation = Animation.UP_RIGHT
-				this.instance.setAngle(0)
-				this.instance.setFlip(false, false)
+				this.animation = DuckAnimation.UP_RIGHT
+				this._instance.setAngle(0)
+				this._instance.setFlip(false, false)
 				break
 
 			case Direction.UP_LEFT:
-				this.#animation = Animation.UP_RIGHT
-				this.instance.setAngle(0)
-				this.instance.setFlip(true, false)
+				this.animation = DuckAnimation.UP_RIGHT
+				this._instance.setAngle(0)
+				this._instance.setFlip(true, false)
 				break
 
 			case Direction.DOWN_RIGHT:
-				this.#animation = Animation.UP_RIGHT
-				this.instance.setAngle(90)
-				this.instance.setFlip(false, false)
+				this.animation = DuckAnimation.UP_RIGHT
+				this._instance.setAngle(90)
+				this._instance.setFlip(false, false)
 				break
 
 			case Direction.DOWN_LEFT:
-				this.#animation = Animation.UP_RIGHT
-				this.instance.setAngle(90)
-				this.instance.setFlip(false, true)
+				this.animation = DuckAnimation.UP_RIGHT
+				this._instance.setAngle(90)
+				this._instance.setFlip(false, true)
+				break
+
+			case Direction.NONE:
+				this.animation = DuckAnimation.RIGHT
+				this._instance.setAngle(0)
+				this._instance.setFlip(false, false)
 				break
 
 			default:
@@ -125,20 +135,12 @@ export class Duck extends BaseActor {
 		this.movement.direction = direction
 	}
 
-	checkOnBounds() {
+	private checkOnBounds() {
 		const isOutOfBorder = this.isOutOfBorder()
 
-		if (isOutOfBorder?.right) this.setMovement(Direction.LEFT)
-		if (isOutOfBorder?.top) this.setMovement(Direction.DOWN_LEFT)
-		if (isOutOfBorder?.left) this.setMovement(Direction.DOWN_RIGHT)
-		if (isOutOfBorder?.bottom) this.setMovement(Direction.UP)
-	}
-
-	update() {
-		if (!this.instance) return
-
-		this.checkOnBounds()
-
-		this.instance.setVelocity(this.movement.velocity.x, this.movement.velocity.y).play(this.#animation, true)
+		if (isOutOfBorder?.right) this.prepareMove(Direction.UP)
+		if (isOutOfBorder?.top) this.prepareMove(Direction.DOWN_LEFT)
+		if (isOutOfBorder?.left) this.prepareMove(Direction.DOWN_RIGHT)
+		if (isOutOfBorder?.bottom) this.prepareMove(Direction.UP)
 	}
 }

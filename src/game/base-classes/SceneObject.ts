@@ -1,9 +1,9 @@
-import Phaser from 'phaser'
 import config from '../../config.json'
-
-type Sprite = Maybe<Phaser.GameObjects.Sprite & Phaser.Physics.Arcade.Sprite>
-
+import { Sprite } from 'game/types'
 export abstract class SceneObject {
+	abstract preload(): void
+	abstract create(): void
+
 	static scene = {
 		width: config.width,
 		height: config.height,
@@ -13,13 +13,11 @@ export abstract class SceneObject {
 		},
 	}
 
-	width = 0
-	height = 0
+	protected width = 0
+	protected height = 0
+	protected _instance: Sprite
 
-	protected instance: Sprite
-
-	abstract preload(): void
-	abstract create(): void
-
-	update() {}
+	public get instance() {
+		return this._instance
+	}
 }

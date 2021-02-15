@@ -1,4 +1,5 @@
-import { Direction, Animation } from 'game/types'
+import { IAnimated } from 'game/interfaces'
+import { Direction, UnknownFn } from 'game/types'
 import { SceneObject } from './SceneObject'
 
 export abstract class BaseActor extends SceneObject {
@@ -6,26 +7,30 @@ export abstract class BaseActor extends SceneObject {
 	// because it should be inited in Phaser's create() method,
 	// which will run ONLY AFTER EcmaScript-constructor
 	// protected instance: Maybe<Phaser.GameObjects.Sprite>
-
 	abstract preload(): void
+	abstract update(): void
 	abstract create(): void
 
-	protected animation = Animation.DEFAULT
 	protected movement = {
 		speed: 0,
 		velocity: { x: 0, y: 0 },
 		direction: Direction.NONE,
 	}
 
-	update() {}
+	protected onFinish: UnknownFn = () => {}
 
-	isOutOfBorder() {
-		if (!this.instance) return null
+	protected prepareMove(direction: Direction, onFinish: UnknownFn = () => {}) {
+		this.setMovement(direction, onFinish)
+		;((this as unknown) as IAnimated)?.setAnimation(direction)
+	}
 
-		const right = SceneObject.scene.width - this.instance.x - this.width < 0
-		const left = this.instance.x - this.width < 0
-		const top = this.instance.y - this.height < 0
-		const bottom = SceneObject.scene.height - this.instance.y - this.height < 0
+	protected isOutOfBorder() {
+		if (!this._instance) return null
+
+		const right = SceneObject.scene.width - this._instance.x - this.width < 0
+		const left = this._instance.x - this.width < 0
+		const top = this._instance.y - this.height < 0
+		const bottom = SceneObject.scene.height - this._instance.y - this.height < 0
 
 		return right || left || top || bottom
 			? {
@@ -37,12 +42,16 @@ export abstract class BaseActor extends SceneObject {
 			: null
 	}
 
-	stopMovement() {
+	protected stopMovement() {
 		this.setMovement(Direction.NONE)
-		this.instance?.setVelocity(0)
+		this._instance?.setVelocity(0)
 	}
 
-	setMovement(direction: Direction) {
+	protected setMovement(direction: Direction, onFinish: UnknownFn = (...args: unknown[]) => {}) {
+		if (this.movement.direction === direction) return
+		console.log('setMovement')
+
+		this.movement.velocity = { x: 0, y: 0 }
 		switch (direction) {
 			case Direction.RIGHT:
 				this.movement.velocity.x = this.movement.speed
@@ -88,6 +97,8 @@ export abstract class BaseActor extends SceneObject {
 			default:
 				throw new Error(`Wrong direction '${direction}'`)
 		}
+		this.onFinish()
+		this.onFinish = onFinish
 		this.movement.direction = direction
 	}
 }
