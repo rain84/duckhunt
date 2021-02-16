@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import { BaseActor } from 'game/base-classes'
 import { IAnimated } from 'game/interfaces'
-import { Direction, DuckAnimation } from 'game/types'
+import { Direction, DuckAnimation, UnknownFn } from 'game/types'
 import { getRandomDirection } from 'game/util'
 
 export class Duck extends BaseActor implements IAnimated {
@@ -14,6 +14,9 @@ export class Duck extends BaseActor implements IAnimated {
 		afterBorderCollision: 0,
 		beforeSwitchingDirection: 0,
 		quack: Phaser.Math.Between(25, 75),
+	}
+	private cb = {
+		onKill: () => {},
 	}
 
 	constructor(private scene: Phaser.Scene) {
@@ -99,12 +102,19 @@ export class Duck extends BaseActor implements IAnimated {
 	}
 
 	kill() {
+		if (this.isKilled) return
+
 		this.isKilled = true
 		this.sounds.dead_duck_falls.play()
-		this.prepareMove(Direction.DOWN, () => console.log('is killed'))
+		this.prepareMove(Direction.DOWN)
+		this.cb.onKill()
 	}
 
-	setSwitchTimer() {
+	onKill(cb: UnknownFn) {
+		this.cb.onKill = cb
+	}
+
+	private setSwitchTimer() {
 		this.counter.beforeSwitchingDirection = Phaser.Math.Between(10, 30)
 	}
 
