@@ -8,6 +8,7 @@ export const App = () => (
 			<Route path="/home" component={Home} />
 			<Route path="/scores">Scores</Route>
 			<Route path="/about">About</Route>
+			<Route path="/" component={Game} />
 			<Route path="/*">
 				<Redirect to="/game" />
 			</Route>
