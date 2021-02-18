@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/duckhunt/static/css/main.3cb902e5.chunk.css",
-    "main.js": "/duckhunt/static/js/main.682e208f.chunk.js",
-    "main.js.map": "/duckhunt/static/js/main.682e208f.chunk.js.map",
+    "main.js": "/duckhunt/static/js/main.bdf6511f.chunk.js",
+    "main.js.map": "/duckhunt/static/js/main.bdf6511f.chunk.js.map",
     "polyfills-css-shim.js": "/duckhunt/static/js/polyfills-css-shim.fb703e0b.chunk.js",
     "polyfills-css-shim.js.map": "/duckhunt/static/js/polyfills-css-shim.fb703e0b.chunk.js.map",
     "runtime-main.js": "/duckhunt/static/js/runtime-main.b5cf257e.js",
@@ -28,6 +28,6 @@
     "static/js/runtime-main.b5cf257e.js",
     "static/js/3.16c75f2c.chunk.js",
     "static/css/main.3cb902e5.chunk.css",
-    "static/js/main.682e208f.chunk.js"
+    "static/js/main.bdf6511f.chunk.js"
   ]
 }
